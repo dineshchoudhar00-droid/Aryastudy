@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -564,8 +564,8 @@
     <h2>Student Study Materials</h2>
 
     <p>
-        Apne semester ke notes, syllabus, assignments aur previous year
-        question papers ko ek hi jagah search karo.
+        search your semester notes, syllabus, assignments and previous year
+        question at one palace.
     </p>
 
 </section>
@@ -582,7 +582,7 @@
         <h3>🔎 Find Your Study Material</h3>
 
         <p class="search-description">
-            PDF title, subject, branch ya file name se search karo.
+         search with PDF title, subject, branch or file name.
         </p>
 
         <div class="search-input">
@@ -720,7 +720,7 @@
 
             <h3>Loading Materials</h3>
 
-            <p>Supabase se PDFs load ho rahi hain...</p>
+            <p>PDF loading...</p>
 
         </div>
 
@@ -884,8 +884,8 @@ async function loadMaterials() {
 
         showStatus(
             "⚠️",
-            "Materials Load Nahi Hue",
-            "Supabase connection, table name aur database SELECT policy check karo."
+            "Material not found",
+            "check Supabase connection, table name and database SELECT policy."
         );
 
         return;
@@ -998,16 +998,16 @@ function renderMaterials() {
 
             showStatus(
                 "📚",
-                "Abhi Koi PDF Available Nahi Hai",
-                "Jab authorised user study material upload karega, PDFs yahan dikhengi."
+                "No PDF available now",
+                "When a authorised person uploads a PDF then it show you."
             );
 
         } else {
 
             showStatus(
                 "🔎",
-                "Koi Matching PDF Nahi Mili",
-                "Search term ya filters badal kar dobara try karo."
+                "NO Matching PDF",
+                "Try again by changing search filters."
             );
 
         }
@@ -1190,4 +1190,4 @@ loadMaterials();
 
 </body>
 </html>
-```
+
