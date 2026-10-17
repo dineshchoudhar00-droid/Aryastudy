@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Arya StudyVault | Arya College Jaipur</title>
+
+    <meta name="description"
+          content="Arya StudyVault - Arya College Jaipur students ke liye study material, notes aur previous year papers.">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        :root {
+            --primary: #102b59;
+            --secondary: #174ea6;
+            --accent: #ffbd45;
+            --light: #f4f7fc;
+            --text: #172033;
+            --muted: #657189;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--light);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 7%;
+            gap: 20px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.07);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand img {
+            width: 58px;
+            height: 58px;
+            object-fit: contain;
+        }
+
+        .brand h1 {
+            font-size: 21px;
+            color: var(--primary);
+            line-height: 1.3;
+        }
+
+        .brand p {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 23px;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+
+        .nav-links .nav-button {
+            color: white;
+            background: var(--secondary);
+            padding: 11px 16px;
+            border-radius: 8px;
+        }
+
+        .menu-button {
+            display: none;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 7px;
+            padding: 9px 12px;
+            font-size: 21px;
+            cursor: pointer;
+        }
+
+        /* HERO SECTION */
+
+        .hero {
+            min-height: 570px;
+            padding: 85px 7%;
+            display: flex;
+            align-items: center;
+            background:
+                radial-gradient(
+                    circle at 85% 20%,
+                    rgba(89, 151, 255, 0.4),
+                    transparent 35%
+                ),
+                linear-gradient(125deg, #0b1e40, #174ea6);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 750px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            color: #ffe2a5;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-size: 13px;
+            margin-bottom: 22px;
+        }
+
+        .hero h2 {
+            font-size: clamp(36px, 5vw, 62px);
+            line-height: 1.13;
+            margin-bottom: 22px;
+        }
+
+        .hero h2 span {
+            color: var(--accent);
+        }
+
+        .hero-description {
+            max-width: 620px;
+            color: #e0e9ff;
+            font-size: 17px;
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 14px 21px;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+        }
+
+        .button-yellow {
+            background: var(--accent);
+            color: #18243b;
+        }
+
+        .button-outline {
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        /* COMMON SECTION */
+
+        .section {
+            padding: 75px 7%;
+        }
+
+        .section-heading {
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto 42px;
+        }
+
+        .section-heading span {
+            color: var(--secondary);
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section-heading h2 {
+            color: var(--primary);
+            font-size: 34px;
+            margin: 10px 0;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+        }
+
+        /* ABOUT */
+
+        .about-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .about-content h2 {
+            font-size: 32px;
+            color: var(--primary);
+            margin-bottom: 18px;
+        }
+
+        .about-content p {
+            color: var(--muted);
+            margin-bottom: 16px;
+        }
+
+        .about-highlight {
+            background: white;
+            border-radius: 18px;
+            padding: 30px;
+            border: 1px solid #e4eaf5;
+            box-shadow: 0 10px 35px rgba(18, 48, 91, 0.07);
+        }
+
+        .about-highlight h3 {
+            color: var(--primary);
+            margin-bottom: 18px;
+            font-size: 22px;
+        }
+
+        .detail {
+            display: flex;
+            gap: 13px;
+            margin: 18px 0;
+        }
+
+        .detail-icon {
+            min-width: 43px;
+            height: 43px;
+            background: #eaf1ff;
+            color: var(--secondary);
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            font-size: 20px;
+        }
+
+        .detail h4 {
+            color: var(--primary);
+            margin-bottom: 3px;
+        }
+
+        .detail p {
+            color: var(--muted);
+            font-size: 14px;
+            overflow-wrap: anywhere;
+        }
+
+        /* FEATURES */
+
+        .features {
+            background: white;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .feature-card {
+            padding: 28px;
+            border-radius: 15px;
+            background: var(--light);
+            border: 1px solid #e7ecf5;
+            transition: 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(20, 55, 100, 0.09);
+        }
+
+        .feature-icon {
+            width: 55px;
+            height: 55px;
+            display: grid;
+            place-items: center;
+            border-radius: 13px;
+            background: #e3edff;
+            font-size: 27px;
+            margin-bottom: 18px;
+        }
+
+        .feature-card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .feature-card a {
+            color: var(--secondary);
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* COURSES */
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .course-card {
+            background: white;
+            border: 1px solid #e3e9f3;
+            padding: 23px;
+            border-radius: 12px;
+        }
+
+        .course-card .number {
+            color: var(--secondary);
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .course-card h3 {
+            margin-top: 10px;
+            color: var(--primary);
+        }
+
+        .course-card p {
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* STUDY MATERIAL CTA */
+
+        .study-cta {
+            padding: 60px 7%;
+            background: linear-gradient(120deg, #102b59, #2056a5);
+            color: white;
+            text-align: center;
+        }
+
+        .study-cta h2 {
+            font-size: 34px;
+            margin-bottom: 12px;
+        }
+
+        .study-cta p {
+            max-width: 650px;
+            margin: 0 auto 25px;
+            color: #e0e9ff;
+        }
+
+        /* CONTACT */
+
+        .contact-box {
+            max-width: 800px;
+            margin: auto;
+            padding: 32px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .contact-box p {
+            margin: 12px 0;
+            color: var(--muted);
+            overflow-wrap: anywhere;
+        }
+
+        .contact-box strong {
+            color: var(--primary);
+        }
+
+        .contact-box a {
+            color: var(--secondary);
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: #091a35;
+            color: white;
+            padding: 35px 7% 20px;
+        }
+
+        .footer-layout {
+            display: flex;
+            justify-content: space-between;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .footer-about {
+            max-width: 420px;
+        }
+
+        footer h3 {
+            margin-bottom: 10px;
+        }
+
+        footer p {
+            color: #c5d1e8;
+            font-size: 14px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .footer-links a {
+            color: #dce7ff;
+            font-size: 14px;
+        }
+
+        .copyright {
+            border-top: 1px solid #30415d;
+            text-align: center;
+            margin-top: 28px;
+            padding-top: 18px;
+        }
+
+        /* MOBILE RESPONSIVE */
+
+        @media (max-width: 900px) {
+            .nav-links {
+                gap: 13px;
+            }
+
+            .nav-links a {
+                font-size: 12px;
+            }
+
+            .feature-grid,
+            .course-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .about-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .navbar {
+                padding: 13px 5%;
+            }
+
+            .brand img {
+                width: 45px;
+                height: 45px;
+            }
+
+            .brand h1 {
+                font-size: 17px;
+            }
+
+            .menu-button {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                padding: 18px 5%;
+                flex-direction: column;
+                align-items: stretch;
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links a {
+                padding: 9px 0;
+                font-size: 14px;
+            }
+
+            .nav-links .nav-button {
+                text-align: center;
+            }
+
+            .hero {
+                min-height: 480px;
+                padding: 65px 6%;
+            }
+
+            .hero-description {
+                font-size: 15px;
+            }
+
+            .section {
+                padding: 55px 6%;
+            }
+
+            .section-heading h2,
+            .about-content h2,
+            .study-cta h2 {
+                font-size: 27px;
+            }
+
+            .feature-grid,
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-box {
+                padding: 22px;
+            }
+
+            .study-cta {
+                padding: 50px 6%;
+            }
+        }
+        .admin-login-btn {
+display: inline-block;
+background: #123b75;
+color: #ffffff !important;
+padding: 10px 18px;
+border-radius: 8px;
+text-decoration: none;
+font-weight: 600;
+transition: 0.3s ease;
+}
+
+.admin-login-btn:hover {
+background: #f0a500;
+color: #ffffff !important;
+}
+
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+    <a href="index.html" class="brand">
+        <img
+            src="arya-logo.png"
+            alt="Arya College Main Campus Logo"
+            onerror="this.style.display='none'"
+        >
+
+        <div>
+            <h1>Arya StudyVault</h1>
+            <p>Arya College · Main Campus Jaipur</p>
+        </div>
+    </a>
+
+    <button
+        class="menu-button"
+        id="menuButton"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+    >
+        ☰
+    </button>
+
+    <nav class="nav-links" id="navLinks">
+        <a href="#home">Home</a>
+        <a href="#about">About College</a>
+        <a href="#courses">Courses</a>
+        <a href="gallery.html">🖼️ Gallery</a>
+        <a href="innovation.html">💡 Innovation Hub</a>
+        <a href="#contact">Contact</a>
+        <a href="students.html" class="nav-button">Study Materials →</a>
+        <a href="innovation-admin.html" class="admin-login-btn">✅ Project Approval</a>
+        <a href="admin.html" class="admin-login-btn">🔐 Admin Login</a>
+ </nav>
+
+</header>
+
+
+<!-- HERO SECTION -->
+
+<main>
+
+<section class="hero" id="home">
+
+    <div class="hero-content">
+
+        <span class="hero-tag">
+            🎓 Arya College · Main Campus · Jaipur
+        </span>
+
+        <h2>
+            Learn Today.<br>
+            Build Your <span>Tomorrow.</span>
+        </h2>
+
+        <p class="hero-description">
+            Welcome to Arya StudyVault — ek student-friendly study portal
+            jahan tum apne semester ke notes, study materials aur
+            previous year question papers aasani se search kar sakte ho.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="students.html" class="button button-yellow">
+                Explore Study Materials →
+            </a>
+
+            <a href="#about" class="button button-outline">
+                Explore College
+            </a>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ABOUT COLLEGE -->
+
+<section class="section" id="about">
+
+    <div class="about-layout">
+
+        <div class="about-content">
+
+            <span style="color:#174ea6;font-weight:bold;">
+                ABOUT THE INSTITUTION
+            </span>
+
+            <h2>
+                About Arya College, Jaipur
+            </h2>
+
+            <p>
+                Arya College Jaipur ek technical education institution hai
+                jo engineering aur anya professional courses offer karta hai.
+                College ki shuruaat saal 2000 mein hui thi.
+            </p>
+
+            <p>
+                College ka Main Campus Kukas, Delhi Road, Jaipur mein
+                sthit hai. Yahan students technical education, practical
+                learning aur professional skills develop kar sakte hain.
+            </p>
+
+            <p>
+                Arya StudyVault students ko study material tak aasaan
+                pahunch dene ke liye banaya gaya ek educational portal hai.
+            </p>
+
+            <a
+                href="https://www.aryacollege.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="button button-yellow"
+                style="background:#174ea6;color:white;"
+            >
+                Official College Website ↗
+            </a>
+
+        </div>
+
+
+        <div class="about-highlight">
+
+            <h3>College Information</h3>
+
+            <div class="detail">
+                <div class="detail-icon">📍</div>
+                <div>
+                    <h4>Main Campus</h4>
+                    <p>
+                        SP-40, RIICO Industrial Area, Kukas,
+                        Delhi Road, Jaipur, Rajasthan – 302028
+                    </p>
+                </div>
+            </div>
+
+            <div class="detail">
+                <div class="detail-icon">📅</div>
+                <div>
+                    <h4>Established</h4>
+                    <p>2000</p>
+                </div>
+            </div>
+
+            <div class="detail">
+                <div class="detail-icon">🎓</div>
+                <div>
+                    <h4>Academic Programs</h4>
+                    <p>Engineering and other professional programs</p>
+                </div>
+            </div>
+
+            <div class="detail">
+                <div class="detail-icon">📚</div>
+                <div>
+                    <h4>Student Study Portal</h4>
+                    <p>Notes, PDFs and previous year papers</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FEATURES -->
+
+<section class="section features">
+
+    <div class="section-heading">
+        <span>ARYA STUDYVAULT</span>
+
+        <h2>Everything Students Need</h2>
+
+        <p>
+            Apne semester ki study resources ko ek hi jagah par
+            search aur access karo.
+        </p>
+    </div>
+
+
+    <div class="feature-grid">
+
+        <article class="feature-card">
+            <div class="feature-icon">📘</div>
+
+            <h3>Study Notes</h3>
+
+            <p>
+                Subjects ke notes aur available study PDFs ko
+                easily search karo.
+            </p>
+
+            <a href="students.html">Explore Notes →</a>
+        </article>
+
+
+        <article class="feature-card">
+            <div class="feature-icon">📝</div>
+
+            <h3>Previous Year Papers</h3>
+
+            <p>
+                Available previous year question papers se
+                apni exam preparation mein help lo.
+            </p>
+
+            <a href="students.html">Find Papers →</a>
+        </article>
+
+
+        <article class="feature-card">
+            <div class="feature-icon">🔎</div>
+
+            <h3>Easy Search</h3>
+
+            <p>
+                Branch, semester, subject aur material type
+                ke according resources filter karo.
+            </p>
+
+            <a href="students.html">Search Materials →</a>
+        </article>
+
+    </div>
+
+</section>
+
+
+<!-- STUDENT INNOVATION HUB & GALLERY -->
+<section class="section" id="student-hub">
+    <div class="section-heading">
+        <span>EXPLORE MORE</span>
+        <h2>Innovation, Projects & Campus Gallery</h2>
+        <p>Student projects submit karo aur college activities ki photos dekho.</p>
+    </div>
+
+    <div class="feature-grid">
+        <article class="feature-card">
+            <div class="feature-icon">💡</div>
+            <h3>Student Innovation Hub</h3>
+            <p>Apna project, problem statement, solution aur PPT/prototype submit karo.</p>
+            <a href="innovation.html">Submit Your Project →</a>
+        </article>
+
+        <article class="feature-card">
+            <div class="feature-icon">🖼️</div>
+            <h3>College Gallery</h3>
+            <p>Campus, events, activities aur student achievements ki photos dekho.</p>
+            <a href="gallery.html">Explore Gallery →</a>
+        </article>
+
+        <article class="feature-card">
+            <div class="feature-icon">✅</div>
+            <h3>Project Approval</h3>
+            <p>Authorised admin pending student projects ko review karke approve ya reject kar sakta hai.</p>
+            <a href="innovation-admin.html">Open Approval Page →</a>
+        </article>
+
+        <article class="feature-card">
+            <div class="feature-icon">📷</div>
+            <h3>Manage Gallery</h3>
+            <p>Admin panel se college gallery mein photos upload aur manage karo.</p>
+            <a href="admin.html">Open Admin Panel →</a>
+        </article>
+    </div>
+</section>
+
+
+<!-- COURSES -->
+
+<section class="section" id="courses">
+
+    <div class="section-heading">
+
+        <span>ACADEMICS</span>
+
+        <h2>Explore Engineering Branches</h2>
+
+        <p>
+            Apni branch aur semester ke according study materials
+            search karne ke liye Students Portal open karo.
+        </p>
+
+    </div>
+
+
+    <div class="course-grid">
+
+        <article class="course-card">
+            <span class="number">BRANCH 01</span>
+            <h3>Computer Science Engineering</h3>
+            <p>Programming, algorithms, databases aur software development.</p>
+        </article>
+
+        <article class="course-card">
+            <span class="number">BRANCH 02</span>
+            <h3>Artificial Intelligence</h3>
+            <p>Artificial intelligence aur intelligent computing se related studies.</p>
+        </article>
+
+        <article class="course-card">
+            <span class="number">BRANCH 03</span>
+            <h3>Electronics Engineering</h3>
+            <p>Electronics, circuits aur communication technologies.</p>
+        </article>
+
+        <article class="course-card">
+            <span class="number">BRANCH 04</span>
+            <h3>Electrical Engineering</h3>
+            <p>Electrical systems, machines aur power engineering.</p>
+        </article>
+
+        <article class="course-card">
+            <span class="number">BRANCH 05</span>
+            <h3>Mechanical Engineering</h3>
+            <p>Machines, manufacturing aur mechanical systems.</p>
+        </article>
+
+        <article class="course-card">
+            <span class="number">BRANCH 06</span>
+            <h3>Civil Engineering</h3>
+            <p>Construction, structures aur infrastructure engineering.</p>
+        </article>
+
+    </div>
+
+    <p style="text-align:center;color:#657189;font-size:13px;margin-top:22px;">
+        Course availability aur specialisations ke liye official college website check karein.
+    </p>
+
+</section>
+
+
+<!-- STUDY MATERIAL CALL TO ACTION -->
+
+<section class="study-cta">
+
+    <h2>Your Study Journey Starts Here</h2>
+
+    <p>
+        Semester notes, PDFs aur previous year question papers
+        dhoondhna ab aur aasaan banao.
+    </p>
+
+    <a href="students.html" class="button button-yellow">
+        Open Students Portal →
+    </a>
+
+</section>
+
+
+<!-- CONTACT -->
+
+<section class="section" id="contact">
+
+    <div class="section-heading">
+
+        <span>GET IN TOUCH</span>
+
+        <h2>College Contact Information</h2>
+
+        <p>
+            College-related enquiries ke liye official contact details
+            aur website ka use karein.
+        </p>
+
+    </div>
+
+
+    <div class="contact-box">
+
+        <p>
+            <strong>College:</strong>
+            Arya College, Jaipur — Main Campus
+        </p>
+
+        <p>
+            <strong>Address:</strong>
+            SP-40, RIICO Industrial Area, Kukas,
+            Delhi Road, Jaipur, Rajasthan – 302028
+        </p>
+
+        <p>
+            <strong>Admission Helpline:</strong>
+            <a href="tel:18001021044">1800-102-1044</a>
+        </p>
+
+        <p>
+            <strong>Email:</strong>
+            <a href="mailto:admission@aryacollege.org">
+                admission@aryacollege.org
+            </a>
+        </p>
+
+        <p>
+            <strong>Official Website:</strong>
+            <a
+                href="https://www.aryacollege.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                www.aryacollege.org
+            </a>
+        </p>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <div class="footer-layout">
+
+        <div class="footer-about">
+
+            <h3>🎓 Arya StudyVault</h3>
+
+            <p>
+                Arya College Jaipur students ke liye study materials
+                search aur access karne ka educational portal.
+            </p>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <h3>Quick Links</h3>
+
+            <a href="index.html">Home</a>
+            <a href="#about">About College</a>
+            <a href="#courses">Courses</a>
+            <a href="students.html">Students Portal</a>
+            <a href="innovation.html">Student Innovation Hub</a>
+            <a href="gallery.html">College Gallery</a>
+            <a href="innovation-admin.html">Project Approval</a>
+            <a href="admin.html">Admin Panel</a>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <h3>Useful Links</h3>
+
+            <a
+                href="https://www.aryacollege.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Official College Website
+            </a>
+
+            <a href="students.html">Study Materials</a>
+
+        </div>
+
+    </div>
+
+
+    <div class="copyright">
+
+        <p>
+            © <span id="year"></span> Arya StudyVault.
+            Educational Student Portal.
+        </p>
+
+        <p style="margin-top:6px;">
+            This is a student study portal and is not the official
+            website of Arya College.
+        </p>
+
+    </div>
+
+</footer>
+
+
+<script>
+    // Mobile navigation menu
+
+    const menuButton = document.getElementById("menuButton");
+    const navLinks = document.getElementById("navLinks");
+
+    menuButton.addEventListener("click", function () {
+        const isOpen = navLinks.classList.toggle("active");
+
+        menuButton.setAttribute("aria-expanded", isOpen);
+        menuButton.textContent = isOpen ? "✕" : "☰";
+    });
+
+    // Close menu after clicking a link
+
+    document.querySelectorAll("#navLinks a").forEach(function (link) {
+        link.addEventListener("click", function () {
+            navLinks.classList.remove("active");
+            menuButton.setAttribute("aria-expanded", "false");
+            menuButton.textContent = "☰";
+        });
+    });
+
+    // Automatically update copyright year
+
+    document.getElementById("year").textContent =
+        new Date().getFullYear();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>College Gallery | Arya StudyVault</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--navy:#102b52;--blue:#245bd6;--bg:#f4f7fc;--text:#18243a;--muted:#68758a;--line:#e4eaf3;--white:#fff}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+header{background:linear-gradient(120deg,#102b52,#245bd6);color:#fff;padding:22px max(18px,calc((100% - 1120px)/2));}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}.brand{font-weight:800;font-size:20px}.navlinks{display:flex;gap:16px;flex-wrap:wrap}.navlinks a{color:#fff;text-decoration:none;font-size:14px;font-weight:700}.hero{max-width:1120px;margin:28px auto 0;padding:0 18px 20px}.hero h1{font-size:clamp(28px,4vw,42px);margin:0 0 10px}.hero p{margin:0;color:#e3ebff;line-height:1.6;max-width:650px}
+main{max-width:1120px;margin:24px auto;padding:0 18px 50px}.toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}.toolbar input,.toolbar select{padding:12px 14px;border:1px solid #d6dfed;border-radius:10px;background:#fff;font-size:15px;min-width:190px;flex:1;outline:none}.toolbar input:focus,.toolbar select:focus{border-color:var(--blue)}
+.status{padding:18px;background:#fff;border:1px solid var(--line);border-radius:12px;color:var(--muted);text-align:center}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.card{background:#fff;border:1px solid var(--line);border-radius:15px;overflow:hidden;box-shadow:0 5px 18px #142b4d0a;cursor:pointer;transition:transform .18s,box-shadow .18s}.card:hover{transform:translateY(-3px);box-shadow:0 10px 24px #142b4d16}.thumb{width:100%;height:220px;object-fit:cover;display:block;background:#e7edf7}.cardbody{padding:15px}.tag{display:inline-block;background:#edf3ff;color:#2452b9;border-radius:30px;padding:5px 9px;font-size:12px;font-weight:700}.card h3{margin:11px 0 7px;font-size:18px}.card p{margin:0;color:var(--muted);font-size:14px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}.date{font-size:12px;color:#8993a4;margin-top:12px}.empty{grid-column:1/-1}.footer{text-align:center;padding:22px;color:#7a8597;font-size:13px}
+.modal{display:none;position:fixed;inset:0;background:#06152ddd;z-index:10;align-items:center;justify-content:center;padding:20px}.modal.show{display:flex}.modalbox{background:#fff;border-radius:14px;max-width:1000px;width:100%;max-height:92vh;overflow:auto;position:relative}.modal img{display:block;width:100%;max-height:72vh;object-fit:contain;background:#111}.modaltext{padding:16px 20px}.close{position:absolute;top:10px;right:10px;border:0;border-radius:50%;width:38px;height:38px;background:#fff;font-size:24px;cursor:pointer;box-shadow:0 2px 12px #0003}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.thumb{height:190px}}@media(max-width:560px){.grid{grid-template-columns:1fr}.thumb{height:230px}.navlinks{gap:11px}.hero{margin-top:22px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="nav"><div class="brand">🎓 Arya StudyVault</div><nav class="navlinks"><a href="index.html">Home</a><a href="students.html">Study Materials</a><a href="innovation.html">Innovation Hub</a><a href="gallery.html">Gallery</a></nav></div>
+  <section class="hero"><h1>College Gallery</h1><p>Explore campus memories, events, activities, projects and student life at Arya College Main Campus.</p></section>
+</header>
+<main>
+  <div class="toolbar"><input id="search" type="search" placeholder="Search gallery…"><select id="category"><option value="">All categories</option><option>Campus</option><option>Events</option><option>Activities</option><option>Projects</option><option>Achievements</option><option>Other</option></select><select id="sort"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></div>
+  <div id="status" class="status">Loading gallery…</div><section id="grid" class="grid" aria-live="polite"></section>
+</main>
+<div class="footer">Arya StudyVault · College Gallery</div>
+<div class="modal" id="modal" role="dialog" aria-modal="true"><div class="modalbox"><button class="close" id="closeModal" aria-label="Close">×</button><img id="modalImg" alt="Gallery image"><div class="modaltext"><h2 id="modalTitle"></h2><p id="modalDesc"></p><span id="modalCategory" class="tag"></span></div></div></div>
+<script>
+const SUPABASE_URL='https://zukxhffmasnnyuonmlbx.supabase.co';
+const SUPABASE_KEY='sb_publishable_lfJyl7L1JuKvXhAlJ0Oryg_0waqWKM-';
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let items=[];
+const grid=document.getElementById('grid'), statusBox=document.getElementById('status');
+function safeText(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function render(){const q=document.getElementById('search').value.trim().toLowerCase();const cat=document.getElementById('category').value;const sort=document.getElementById('sort').value;let list=items.filter(x=>(!cat||(x.category||'Campus')===cat)&&(!q||`${x.title||''} ${x.description||''} ${x.category||''}`.toLowerCase().includes(q)));list.sort((a,b)=>sort==='newest'?new Date(b.created_at)-new Date(a.created_at):new Date(a.created_at)-new Date(b.created_at));grid.innerHTML='';if(!list.length){statusBox.style.display='block';statusBox.textContent=items.length?'No gallery items match your search.':'No gallery photos have been added yet.';return;}statusBox.style.display='none';for(const item of list){const card=document.createElement('article');card.className='card';card.tabIndex=0;card.innerHTML=`<img class="thumb" loading="lazy" src="${safeText(item.image_url)}" alt="${safeText(item.title)}"><div class="cardbody"><span class="tag">${safeText(item.category||'Campus')}</span><h3>${safeText(item.title)}</h3><p>${safeText(item.description||'')}</p><div class="date">${item.created_at?new Date(item.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):''}</div></div>`;const open=()=>showModal(item);card.addEventListener('click',open);card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});grid.appendChild(card);}}
+function showModal(item){document.getElementById('modalImg').src=item.image_url;document.getElementById('modalImg').alt=item.title||'Gallery image';document.getElementById('modalTitle').textContent=item.title||'';document.getElementById('modalDesc').textContent=item.description||'';document.getElementById('modalCategory').textContent=item.category||'Campus';document.getElementById('modal').classList.add('show');}
+function closeModal(){document.getElementById('modal').classList.remove('show');document.getElementById('modalImg').src='';}
+document.getElementById('closeModal').addEventListener('click',closeModal);document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal();});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});['search','category','sort'].forEach(id=>document.getElementById(id).addEventListener(id==='search'?'input':'change',render));
+async function loadGallery(){statusBox.style.display='block';statusBox.textContent='Loading gallery…';const {data,error}=await db.from('college_gallery').select('id,title,description,category,image_url,created_at').order('created_at',{ascending:false});if(error){console.error(error);statusBox.textContent='Gallery load nahi ho rahi. Supabase table/policies check karo: '+error.message;return;}items=data||[];render();}
+loadGallery();
+</script>
+</body>
+</html>
