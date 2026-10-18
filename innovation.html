@@ -403,5 +403,23 @@ async function loadApprovedProjects(){projectList.replaceChildren();projectCount
 refreshAuthUI();
 loadApprovedProjects();
 </script>
-</body>
+<script>
+async function checkLoginAndRedirect() {
+    const { data: { session }, error } =
+        await db.auth.getSession();
+
+    if (error) {
+        console.error("Session error:", error.message);
+        return;
+    }
+
+    if (session) {
+        window.location.replace(
+            "https://dineshchoudhar00-droid.github.io/Aryastudy/students.html"
+        );
+    }
+}
+
+checkLoginAndRedirect();
+</script></body>
 </html>
