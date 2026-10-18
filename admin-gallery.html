@@ -1022,7 +1022,95 @@ galleryForm.addEventListener("submit", async (event) => {
     if (!file) return showMessage(galleryUploadStatus, "Please select an image first.");
     if (!/^image\/(jpeg|png|webp)$/.test(file.type)) return showMessage(galleryUploadStatus, "Only JPG, PNG, or WEBP images are allowed.");
     if (file.size > 8 * 1024 * 1024) return showMessage(galleryUploadStatus, "The image must be smaller than 8 MB.");
-galleryUploadButton.disabled = true; showMessage(galleryUploadStatus, "Image uploading..."); const ext = ({"image/jpeg":"jpg", "image/png":"png", "image/webp":"webp"})[file.type]; const path = gallery/${crypto.randomUUID()}.${ext}; try { const { error: storageError } = await db.storage.from(GALLERY_BUCKET).upload(path, file, { contentType: file.type, upsert: false }); if (storageError) throw storageError; const imageUrl = db.storage.from(GALLERY_BUCKET).getPublicUrl(path).data.publicUrl; const { error: insertError } = await db.from("college_gallery").insert({ title, description: description || null, category, image_url: imageUrl }); if (insertError) { await db.storage.from(GALLERY_BUCKET).remove([path]); throw insertError; }
+
+async function uploadGalleryImage() {
+    if (!currentUser || !isAdmin(currentUser)) {
+        showMessage(galleryUploadStatus, "Admin access required.");
+        return;
+    }
+
+    const file = galleryImageInput.files[0];
+    const title = galleryTitleInput.value.trim();
+    const description = galleryDescriptionInput.value.trim();
+    const category = galleryCategoryInput.value;
+
+    if (!file || !title || !category) {
+        showMessage(galleryUploadStatus, "Please fill all required fields and select an image.");
+        return;
+    }
+
+    const ext = {
+        "image/jpeg": "jpg",
+        "image/png": "png",
+        "image/webp": "webp"
+    }[file.type];
+
+    if (!ext) {
+        showMessage(galleryUploadStatus, "Only JPG, PNG and WEBP images are allowed.");
+        return;
+    }
+
+    const path = `gallery/${crypto.randomUUID()}.${ext}`;
+
+    galleryUploadButton.disabled = true;
+    showMessage(galleryUploadStatus, "Image uploading...");
+
+    try {
+        const { error: storageError } = await db.storage
+            .from(GALLERY_BUCKET)
+            .upload(path, file, {
+                contentType: file.type,
+                upsert: false
+            });
+
+        if (storageError) {
+            throw storageError;
+        }
+
+        const { data: publicUrlData } = db.storage
+            .from(GALLERY_BUCKET)
+            .getPublicUrl(path);
+
+        const imageUrl = publicUrlData.publicUrl;
+
+        const { error: insertError } = await db
+            .from("college_gallery")
+            .insert({
+                title: title,
+                description: description || null,
+                category: category,
+                image_url: imageUrl
+            });
+
+        if (insertError) {
+            await db.storage
+                .from(GALLERY_BUCKET)
+                .remove([path]);
+
+            throw insertError;
+        }
+
+        showMessage(galleryUploadStatus, "Image uploaded successfully!");
+
+        galleryImageInput.value = "";
+        galleryTitleInput.value = "";
+        galleryDescriptionInput.value = "";
+        galleryCategoryInput.selectedIndex = 0;
+
+        await loadGalleryAdmin();
+
+    } catch (error) {
+        console.error("Gallery upload error:", error);
+        showMessage(
+            galleryUploadStatus,
+            "Upload failed: " + (error.message || "Unknown error")
+        );
+    } finally {
+        galleryUploadButton.disabled = false;
+    }
+}
+
+
 
 
 
