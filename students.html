@@ -563,8 +563,8 @@
     <h2>Student Study Materials</h2>
 
     <p>
-        search your semester notes, syllabus, assignments and previous year
-        question at one palace.
+        Search your semester notes, syllabus, assignments, and previous-year
+        question papers in one place.
     </p>
 
 </section>
@@ -581,7 +581,7 @@
         <h3>🔎 Find Your Study Material</h3>
 
         <p class="search-description">
-         search with PDF title, subject, branch or file name.
+            Search by PDF title, subject, branch, or file name.
         </p>
 
         <div class="search-input">
@@ -719,7 +719,7 @@
 
             <h3>Loading Materials</h3>
 
-            <p>PDF loading...</p>
+            <p>Loading PDFs...</p>
 
         </div>
 
@@ -859,7 +859,7 @@ async function loadMaterials() {
     showStatus(
         "⏳",
         "Loading Materials",
-        "Supabase se PDFs load ho rahi hain..."
+        "Loading PDFs from Supabase..."
     );
 
     resultCount.textContent = "Loading...";
@@ -883,8 +883,8 @@ async function loadMaterials() {
 
         showStatus(
             "⚠️",
-            "Material not found",
-            "check Supabase connection, table name and database SELECT policy."
+            "Materials Not Found",
+            "Please check the Supabase connection, table name, and database SELECT policy."
         );
 
         return;
@@ -997,16 +997,16 @@ function renderMaterials() {
 
             showStatus(
                 "📚",
-                "No PDF available now",
-                "When a authorised person uploads a PDF then it show you."
+                "No PDFs Available Yet",
+                "PDFs will appear here when an authorised administrator uploads them."
             );
 
         } else {
 
             showStatus(
                 "🔎",
-                "NO Matching PDF",
-                "Try again by changing search filters."
+                "No Matching PDFs",
+                "Try again by changing the search filters."
             );
 
         }
