@@ -1022,83 +1022,9 @@ galleryForm.addEventListener("submit", async (event) => {
     if (!file) return showMessage(galleryUploadStatus, "Please select an image first.");
     if (!/^image\/(jpeg|png|webp)$/.test(file.type)) return showMessage(galleryUploadStatus, "Only JPG, PNG, or WEBP images are allowed.");
     if (file.size > 8 * 1024 * 1024) return showMessage(galleryUploadStatus, "The image must be smaller than 8 MB.");
+galleryUploadButton.disabled = true; showMessage(galleryUploadStatus, "Image uploading..."); const ext = ({"image/jpeg":"jpg", "image/png":"png", "image/webp":"webp"})[file.type]; const path = gallery/${crypto.randomUUID()}.${ext}; try { const { error: storageError } = await db.storage.from(GALLERY_BUCKET).upload(path, file, { contentType: file.type, upsert: false }); if (storageError) throw storageError; const imageUrl = db.storage.from(GALLERY_BUCKET).getPublicUrl(path).data.publicUrl; const { error: insertError } = await db.from("college_gallery").insert({ title, description: description || null, category, image_url: imageUrl }); if (insertError) { await db.storage.from(GALLERY_BUCKET).remove([path]); throw insertError; }
 
 
-galleryUploadButton.disabled = true;
-showMessage(galleryUploadStatus, "Image uploading...");
-
-const ext = ({
-    "image/jpeg": "jpg",
-    "image/png": "png",
-    "image/webp": "webp"
-})[file.type];
-
-const path = `gallery/${crypto.randomUUID()}.${ext}`;
-
-try {
-    // STEP 1: Upload image to Storage
-    const { error: storageError } = await db.storage
-        .from(GALLERY_BUCKET)
-        .upload(path, file, {
-            contentType: file.type,
-            upsert: false
-        });
-
-    if (storageError) {
-        console.error("STORAGE ERROR:", storageError);
-        throw new Error("STORAGE ERROR: " + storageError.message);
-    }
-
-    console.log("Image uploaded successfully!");
-
-    // STEP 2: Generate public image URL
-    const imageUrl = db.storage
-        .from(GALLERY_BUCKET)
-        .getPublicUrl(path).data.publicUrl;
-
-    // STEP 3: Insert record into database
-    const { error: insertError } = await db
-        .from("college_gallery")
-        .insert({
-            title,
-            description: description || null,
-            category,
-            image_url: imageUrl
-        });
-
-    if (insertError) {
-        console.error("DATABASE INSERT ERROR:", insertError);
-
-        // Attempt to remove the uploaded image
-        const { error: cleanupError } = await db.storage
-            .from(GALLERY_BUCKET)
-            .remove([path]);
-
-        if (cleanupError) {
-            console.error("IMAGE CLEANUP ERROR:", cleanupError);
-        }
-
-        throw new Error(
-            "DATABASE INSERT ERROR: " + insertError.message
-        );
-    }
-
-    galleryForm.reset();
-    showMessage(galleryUploadStatus, "✅ Photo uploaded successfully!");
-
-    await loadGalleryAdmin();
-
-} catch (error) {
-    console.error("GALLERY UPLOAD FAILED:", error);
-
-    showMessage(
-        galleryUploadStatus,
-        "❌ " + (error.message || "Upload failed.")
-    );
-
-} finally {
-    galleryUploadButton.disabled = false;
-}
 
 
         galleryForm.reset();
