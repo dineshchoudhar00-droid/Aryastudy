@@ -214,7 +214,7 @@ footer {
         <h2>Admin Login</h2>
 
         <p class="description">
-            Study material upload aur manage karne ke liye login karein.
+            Sign in to upload and manage study materials.
         </p>
 
         <form id="loginForm" class="form-grid">
@@ -260,8 +260,8 @@ footer {
             <h2>📤 Upload Study Material</h2>
 
             <p class="description">
-                PDF upload karo. Upload successful hone par
-                Students page par material available ho sakega.
+                Upload a PDF. Once the upload is successful,
+                the material will be available on the Students page.
             </p>
 
             <form id="uploadForm" class="form-grid">
@@ -387,7 +387,7 @@ footer {
             <h2>📚 Uploaded Materials</h2>
 
             <p class="description">
-                Yahan uploaded PDFs dekh aur manage kar sakte ho.
+                You can view and manage uploaded PDFs here.
             </p>
 
             <button
@@ -409,7 +409,7 @@ footer {
 
         <section class="panel" id="galleryManager">
             <h2>🖼️ College Gallery Manager</h2>
-            <p class="description">College photos upload karo, category set karo aur purani photos delete karo.</p>
+            <p class="description">Upload college photos, set their categories, and delete old photos.</p>
             <form id="galleryForm" class="form-grid">
                 <div class="field">
                     <label for="galleryTitle">Photo Title *</label>
@@ -427,12 +427,12 @@ footer {
                 </div>
                 <div class="field full">
                     <label for="galleryDescription">Description (Optional)</label>
-                    <textarea id="galleryDescription" rows="3" maxlength="500" placeholder="Photo ke baare mein chhoti si jankari"></textarea>
+                    <textarea id="galleryDescription" rows="3" maxlength="500" placeholder="A brief description of the photo"></textarea>
                 </div>
                 <div class="field full">
                     <label for="galleryImage">Choose Image *</label>
                     <input id="galleryImage" type="file" accept="image/jpeg,image/png,image/webp" required>
-                    <small>JPG, PNG ya WEBP. Maximum 8 MB.</small>
+                    <small>JPG, PNG, or WEBP. Maximum 8 MB.</small>
                 </div>
                 <div class="field full">
                     <button class="primary" id="galleryUploadButton" type="submit">Upload Gallery Photo</button>
@@ -518,8 +518,8 @@ function safeText(value) {
 
 /*
   Important:
-  Admin access tabhi milega jab Supabase Auth user ki
-  app_metadata mein role = admin set ho.
+  Admin access is granted only when role = admin is set in the Supabase Auth user's
+  app_metadata.
 */
 
 function isAdmin(user) {
@@ -569,7 +569,7 @@ async function login(email, password) {
         await db.auth.signOut();
 
         throw new Error(
-            "Is account ko admin permission nahi hai. Supabase mein admin role configure karo."
+            "This account does not have admin permissions. Configure the admin role in Supabase."
         );
     }
 
@@ -580,7 +580,7 @@ loginForm.addEventListener("submit", async event => {
     event.preventDefault();
 
     loginButton.disabled = true;
-    showMessage(loginStatus, "Login ho raha hai...");
+    showMessage(loginStatus, "Signing in...");
 
     try {
         await login(
@@ -614,7 +614,7 @@ document.getElementById("uploadForm").addEventListener(
         const file = document.getElementById("pdfFile").files[0];
 
         if (!file) {
-            showMessage(uploadStatus, "Pehle PDF select karo.");
+            showMessage(uploadStatus, "Please select a PDF first.");
             return;
         }
 
@@ -622,12 +622,12 @@ document.getElementById("uploadForm").addEventListener(
             file.type !== "application/pdf" &&
             !file.name.toLowerCase().endsWith(".pdf")
         ) {
-            showMessage(uploadStatus, "Sirf PDF files allowed hain.");
+            showMessage(uploadStatus, "Only PDF files are allowed.");
             return;
         }
 
         if (file.size > 20 * 1024 * 1024) {
-            showMessage(uploadStatus, "PDF ka size 20 MB se kam hona chahiye.");
+            showMessage(uploadStatus, "The PDF file must be smaller than 20 MB.");
             return;
         }
 
@@ -635,7 +635,7 @@ document.getElementById("uploadForm").addEventListener(
 
         let uploadedPath = null;
 
-        showMessage(uploadStatus, "PDF upload ho rahi hai...");
+        showMessage(uploadStatus, "Uploading PDF...");
 
         try {
             const extension = ".pdf";
@@ -688,8 +688,8 @@ document.getElementById("uploadForm").addEventListener(
 
             if (insertError) {
                 /*
-                  Database insert fail hone par uploaded file ko
-                  delete karne ki koshish karo.
+                  If the database insert fails, try to
+                  delete the uploaded file.
                 */
 
                 const { error: cleanupError } = await db.storage
@@ -708,7 +708,7 @@ document.getElementById("uploadForm").addEventListener(
                 throw insertError;
             }
 
-            showMessage(uploadStatus, "✅ PDF successfully upload ho gayi!");
+            showMessage(uploadStatus, "✅ PDF uploaded successfully!");
 
             document.getElementById("uploadForm").reset();
 
@@ -737,7 +737,7 @@ async function loadResources() {
         return;
     }
 
-    showMessage(listStatus, "Materials load ho rahe hain...");
+    showMessage(listStatus, "Loading materials...");
 
     resourceList.replaceChildren();
 
@@ -753,19 +753,19 @@ async function loadResources() {
 
         showMessage(
             listStatus,
-            "Materials load nahi hue. Database SELECT policy check karo."
+            "Materials could not be loaded. Please check the database SELECT policy."
         );
 
         return;
     }
 
     if (!data || data.length === 0) {
-        showMessage(listStatus, "Abhi koi material upload nahi hua.");
+        showMessage(listStatus, "No materials have been uploaded yet.");
 
         return;
     }
 
-    showMessage(listStatus, `${data.length} material(s) available hain.`);
+    showMessage(listStatus, `${data.length} material(s) available.`);
 
     data.forEach(resource => {
         const card = document.createElement("article");
@@ -841,7 +841,7 @@ resourceList.addEventListener("click", async event => {
     }
 
     const confirmed = confirm(
-        "are you surly wanr to delete this PDF."
+        "Are you sure you want to delete this PDF?"
     );
 
     if (!confirmed) {
@@ -867,9 +867,9 @@ resourceList.addEventListener("click", async event => {
         }
 
         /*
-          Pehle database row delete karo.
-          Agar storage deletion fail ho, database record
-          dobara insert karne ki koshish hoti hai.
+          First, delete the database row.
+          If storage deletion fails, an attempt is made to
+          insert the database record again.
         */
 
         const { data: deletedRows, error: deleteError } = await db
@@ -884,7 +884,7 @@ resourceList.addEventListener("click", async event => {
 
         if (!deletedRows || deletedRows.length === 0) {
             throw new Error(
-                "Database not row deleted. check RLS DELETE policy ."
+                "The database row was not deleted. Please check the RLS DELETE policy."
             );
         }
 
@@ -896,8 +896,8 @@ resourceList.addEventListener("click", async event => {
             console.error(storageDeleteError);
 
             /*
-              Storage deletion fail hui toh metadata restore
-              karne ki koshish karte hain.
+              If storage deletion fails, try to restore
+              the metadata.
             */
 
             const { error: restoreError } = await db
@@ -912,7 +912,7 @@ resourceList.addEventListener("click", async event => {
             }
 
             throw new Error(
-                "Storage not file deleted. please check Policies and permissions."
+                "The storage file was not deleted. Please check the policies and permissions."
             );
         }
 
@@ -984,7 +984,7 @@ async function initialise() {
 
         showMessage(
             loginStatus,
-            "this account has no admin permission."
+            "This account does not have admin permissions."
         );
 
         return;
@@ -1019,9 +1019,9 @@ galleryForm.addEventListener("submit", async (event) => {
     const category = document.getElementById("galleryCategory").value;
     const description = document.getElementById("galleryDescription").value.trim();
     const file = document.getElementById("galleryImage").files[0];
-    if (!file) return showMessage(galleryUploadStatus, "Please select image first..");
-    if (!/^image\/(jpeg|png|webp)$/.test(file.type)) return showMessage(galleryUploadStatus, "only JPG, PNG ya WEBP image allowed .");
-    if (file.size > 8 * 1024 * 1024) return showMessage(galleryUploadStatus, "Image should be less then 8 MB.");
+    if (!file) return showMessage(galleryUploadStatus, "Please select an image first.");
+    if (!/^image\/(jpeg|png|webp)$/.test(file.type)) return showMessage(galleryUploadStatus, "Only JPG, PNG, or WEBP images are allowed.");
+    if (file.size > 8 * 1024 * 1024) return showMessage(galleryUploadStatus, "The image must be smaller than 8 MB.");
 
     galleryUploadButton.disabled = true;
     showMessage(galleryUploadStatus, "Image uploading...");
@@ -1065,10 +1065,10 @@ async function loadGalleryAdmin() {
         return;
     }
     if (!data || !data.length) {
-        showMessage(galleryListStatus, "no photo uploaded now.");
+        showMessage(galleryListStatus, "No photos have been uploaded yet.");
         return;
     }
-    showMessage(galleryListStatus, `${data.length} photo(s) are in gallery .`);
+    showMessage(galleryListStatus, `${data.length} photo(s) are in the gallery.`);
     const grid = document.createElement("div");
     grid.className = "gallery-admin-grid";
     data.forEach(item => {
@@ -1091,7 +1091,7 @@ galleryAdminList.addEventListener("click", async (event) => {
     if (!button) return;
     if (!currentUser || !isAdmin(currentUser)) return alert("Admin login required.");
     const id = button.dataset.galleryDelete;
-    if (galleryDeletingIds.has(id) || !confirm("are you surly want to delete this photo from gallery")) return;
+    if (galleryDeletingIds.has(id) || !confirm("Are you sure you want to delete this photo from the gallery?")) return;
     galleryDeletingIds.add(id);
     button.disabled = true;
     try {
@@ -1110,7 +1110,7 @@ galleryAdminList.addEventListener("click", async (event) => {
         await loadGalleryAdmin();
     } catch (error) {
         console.error("Gallery delete error:", error);
-        showMessage(galleryListStatus, "❌ Delete failed: " + (error.message || "please check RLS policy."));
+        showMessage(galleryListStatus, "❌ Delete failed: " + (error.message || "Please check the RLS policy."));
     } finally {
         galleryDeletingIds.delete(id);
     }
