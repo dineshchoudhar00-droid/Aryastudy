@@ -841,7 +841,7 @@ resourceList.addEventListener("click", async event => {
     }
 
     const confirmed = confirm(
-        "Kya tum sach mein is PDF ko delete karna chahte ho?"
+        "are you surly wanr to delete this PDF."
     );
 
     if (!confirmed) {
@@ -863,7 +863,7 @@ resourceList.addEventListener("click", async event => {
         }
 
         if (!resource) {
-            throw new Error("Material nahi mila.");
+            throw new Error("Material not found.");
         }
 
         /*
@@ -884,7 +884,7 @@ resourceList.addEventListener("click", async event => {
 
         if (!deletedRows || deletedRows.length === 0) {
             throw new Error(
-                "Database row delete nahi hui. RLS DELETE policy check karo."
+                "Database not row deleted. check RLS DELETE policy ."
             );
         }
 
@@ -912,11 +912,11 @@ resourceList.addEventListener("click", async event => {
             }
 
             throw new Error(
-                "Storage file delete nahi hui. Policies aur permissions check karo."
+                "Storage not file deleted. please check Policies and permissions."
             );
         }
 
-        showMessage(listStatus, "✅ PDF delete ho gayi.");
+        showMessage(listStatus, "✅ PDF deleted.");
 
         await loadResources();
 
@@ -984,7 +984,7 @@ async function initialise() {
 
         showMessage(
             loginStatus,
-            "Is account ko admin permission nahi hai."
+            "this account has no admin permission."
         );
 
         return;
@@ -1019,12 +1019,12 @@ galleryForm.addEventListener("submit", async (event) => {
     const category = document.getElementById("galleryCategory").value;
     const description = document.getElementById("galleryDescription").value.trim();
     const file = document.getElementById("galleryImage").files[0];
-    if (!file) return showMessage(galleryUploadStatus, "Pehle image select karo.");
-    if (!/^image\/(jpeg|png|webp)$/.test(file.type)) return showMessage(galleryUploadStatus, "Sirf JPG, PNG ya WEBP image allowed hai.");
-    if (file.size > 8 * 1024 * 1024) return showMessage(galleryUploadStatus, "Image 8 MB se chhoti honi chahiye.");
+    if (!file) return showMessage(galleryUploadStatus, "Please select image first..");
+    if (!/^image\/(jpeg|png|webp)$/.test(file.type)) return showMessage(galleryUploadStatus, "only JPG, PNG ya WEBP image allowed .");
+    if (file.size > 8 * 1024 * 1024) return showMessage(galleryUploadStatus, "Image should be less then 8 MB.");
 
     galleryUploadButton.disabled = true;
-    showMessage(galleryUploadStatus, "Image upload ho rahi hai...");
+    showMessage(galleryUploadStatus, "Image uploading...");
     const ext = ({"image/jpeg":"jpg", "image/png":"png", "image/webp":"webp"})[file.type];
     const path = `gallery/${crypto.randomUUID()}.${ext}`;
     try {
@@ -1041,11 +1041,11 @@ galleryForm.addEventListener("submit", async (event) => {
             throw insertError;
         }
         galleryForm.reset();
-        showMessage(galleryUploadStatus, "✅ Photo upload ho gayi!");
+        showMessage(galleryUploadStatus, "✅ Photo uploaded!");
         await loadGalleryAdmin();
     } catch (error) {
         console.error("Gallery upload error:", error);
-        showMessage(galleryUploadStatus, "❌ Upload failed: " + (error.message || "Supabase policy/table check karo."));
+        showMessage(galleryUploadStatus, "❌ Upload failed: " + (error.message || "Supabase please check policy/table ."));
     } finally {
         galleryUploadButton.disabled = false;
     }
@@ -1054,20 +1054,21 @@ galleryForm.addEventListener("submit", async (event) => {
 async function loadGalleryAdmin() {
     if (!currentUser || !isAdmin(currentUser)) return;
     galleryAdminList.replaceChildren();
-    showMessage(galleryListStatus, "Gallery load ho rahi hai...");
+    showMessage(galleryListStatus, "Gallery loading...");
     const { data, error } = await db.from("college_gallery")
         .select("id,title,description,category,image_url,created_at")
         .order("created_at", { ascending: false });
     if (error) {
         console.error("Gallery list error:", error);
-        showMessage(galleryListStatus, "Gallery load nahi hui. college_gallery ki SELECT policy check karo.");
+        showMessage(galleryListStatus, "The gallery could not be loaded. Please check the SELECT policy for the `college_gallery` table in Supabase.
+");
         return;
     }
     if (!data || !data.length) {
-        showMessage(galleryListStatus, "Abhi koi photo upload nahi hui.");
+        showMessage(galleryListStatus, "no photo uploaded now.");
         return;
     }
-    showMessage(galleryListStatus, `${data.length} photo(s) gallery mein hain.`);
+    showMessage(galleryListStatus, `${data.length} photo(s) are in gallery .`);
     const grid = document.createElement("div");
     grid.className = "gallery-admin-grid";
     data.forEach(item => {
@@ -1090,14 +1091,14 @@ galleryAdminList.addEventListener("click", async (event) => {
     if (!button) return;
     if (!currentUser || !isAdmin(currentUser)) return alert("Admin login required.");
     const id = button.dataset.galleryDelete;
-    if (galleryDeletingIds.has(id) || !confirm("Kya is photo ko gallery se delete karna hai?")) return;
+    if (galleryDeletingIds.has(id) || !confirm("are you surly want to delete this photo from gallery")) return;
     galleryDeletingIds.add(id);
     button.disabled = true;
     try {
         const { data: item, error: findError } = await db.from("college_gallery")
             .select("id,image_url").eq("id", id).maybeSingle();
         if (findError) throw findError;
-        if (!item) throw new Error("Photo nahi mili.");
+        if (!item) throw new Error("Photo not found.");
         const { error: deleteError } = await db.from("college_gallery").delete().eq("id", id);
         if (deleteError) throw deleteError;
         const path = galleryStoragePathFromUrl(item.image_url);
@@ -1105,11 +1106,11 @@ galleryAdminList.addEventListener("click", async (event) => {
             const { error: storageDeleteError } = await db.storage.from(GALLERY_BUCKET).remove([path]);
             if (storageDeleteError) console.warn("Database entry deleted, but storage image delete failed:", storageDeleteError);
         }
-        showMessage(galleryListStatus, "Photo delete kar di gayi.");
+        showMessage(galleryListStatus, "Photo has been deleted.");
         await loadGalleryAdmin();
     } catch (error) {
         console.error("Gallery delete error:", error);
-        showMessage(galleryListStatus, "❌ Delete failed: " + (error.message || "RLS policy check karo."));
+        showMessage(galleryListStatus, "❌ Delete failed: " + (error.message || "please check RLS policy."));
     } finally {
         galleryDeletingIds.delete(id);
     }
