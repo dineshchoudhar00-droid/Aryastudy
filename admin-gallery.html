@@ -1060,8 +1060,10 @@ async function loadGalleryAdmin() {
         .order("created_at", { ascending: false });
     if (error) {
         console.error("Gallery list error:", error);
-        showMessage(galleryListStatus, "The gallery could not be loaded. Please check the SELECT policy for the `college_gallery` table in Supabase.
-");
+     showMessage(
+    galleryListStatus,
+    "The gallery could not be loaded. Please check the SELECT policy for the `college_gallery` table in Supabase."
+);
         return;
     }
     if (!data || !data.length) {
